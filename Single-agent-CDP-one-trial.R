@@ -1,0 +1,62 @@
+
+cdp<-function(p0,target,a0,b0,ssize,n.stop,cl){
+      ndose = length(p0);   #number of dose levels
+	y=n=dose.select=numeric(ndose);  #number of DLTs at each dose level
+      stop=0; #indicate if trial stops early
+      curr = 1
+      i=1
+      while(i <= ssize){
+        y[curr] = y[curr] + rbinom(1,1,p0[curr]);
+        
+        # is p0 a vector of probabilities? like the first scenario?
+        
+        n[curr] = n[curr] + 1;
+        tried=which(n>0)
+             
+        safety=ifelse(n[1]>1,1 - pbeta(target, y[1] + a0, n[1] - y[1] + b0),0)
+        #I shoud see what this part does
+        
+        if(safety>cl){ #check to see if lowest dose level is too toxic
+          stop=1
+          break
+        }
+      
+	u=(y[tried]+a0)/(n[tried]+a0+b0)
+
+        pipost=pava(u,w=n)
+        lossvec=abs(pipost-target)  
+        T=lossvec==min(lossvec)
+        poss=which(T)
+        if(sum(T)==1){
+          sugglev=poss
+        } else {
+          if(all(pipost[poss]>target)){
+            sugglev=min(poss)
+          } else {
+            sugglev=max(poss)
+          }
+        }
+        
+        
+        if(length(tried)<ndose){
+          if(pipost[sugglev]<target){
+            curr=ifelse(n[sugglev+1]==0,sugglev+1,sugglev)					
+          } else {
+            curr=sugglev
+          }
+        } else {
+          curr=sugglev
+        }
+        
+        if(n[curr]>=n.stop){
+          stop<-0
+          break
+        }
+        
+        i<-i+1
+      }		
+      if(stop==0){
+        dose.select[curr]=dose.select[curr]+1;
+      }
+      return(list(dose.select=dose.select,tox.data=y,pt.allocation=n,stop=stop))
+   }
