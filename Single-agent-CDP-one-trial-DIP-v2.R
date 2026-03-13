@@ -1,8 +1,7 @@
+#This code is for DIP with non-flat prior.
+#We are only using DIP_mean method here. 
+
 library(Iso)
-
-# This is DIP mean method
-# N is the maximum effective sample size
-
 cdp_DIP2<-function(p0,target,ssize,n.stop,cl,N){
   ndose = length(p0);   #number of dose levels
   y=n=dose.select=numeric(ndose);  #number of DLTs at each dose level
@@ -77,3 +76,4 @@ cdp_DIP2<-function(p0,target,ssize,n.stop,cl,N){
 # cl = 0.95
 # N = 20
 # cdp_DIP2(p0,target,ssize,n.stop,cl,N)
+
