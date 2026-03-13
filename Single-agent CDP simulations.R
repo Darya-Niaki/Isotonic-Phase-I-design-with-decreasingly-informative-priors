@@ -1,7 +1,7 @@
 #install.packages("Iso")
 library(Iso)
     
-dir<-"C:/Users/shokouhinid/sstp_2023_Wages/Dr. wages_code"  #specify directory containing following code files
+dir<-"path"  #specify directory containing Single-agent-CDP-one-trial and Single-agent-CDP-multiple-trials.R
 source(paste(dir,"/Single-agent-CDP-one-trial.R",sep="")) #code to run one simulated trial
 source(paste(dir,"/Single-agent-CDP-multiple-trials.R",sep="")) #code to run multiple simulated trials
 
@@ -36,7 +36,7 @@ b0<-uniroot(f,c(0.0001,100))$root
 a0<-mu*b0/(1-mu)
 
 paper_scenarios_0.2 = rbind(r1,r2,r3,r4,r5,r6,r7,r8,r9,r10)
-write.csv(paper_scenarios_0.2,"C:/Users/shokouhinid/Downloads/sample_0.2.csv")
+write.csv(paper_scenarios_0.2,"/sample_0.2.csv") # path to save the True DLT probabilities 
 
 ntrial <- 10000    #number of simulated trials
 target <- 0.20	#target DLT rate
@@ -57,11 +57,11 @@ for(i in 1:nrow(paper_scenarios_0.2)){
   safety = results[5,1]#all the values are equal
   total_sample = results[6,1]
   df[,i] = c(pcs,overdose_patient,safety,total_sample)
-  add = paste0("C:/Users/shokouhinid/sstp_2023_Wages/Dr. wages_code/final_results_01232025/target_0.2/CDP/",i,".csv")
+  add = paste0("path/target_0.2/CDP/",i,".csv") #path to save the results of simulations
   write.csv(results,add)
 }
 
-ad = paste0("C:/Users/shokouhinid/sstp_2023_Wages/Dr. wages_code/final_results_01232025/target_0.2/CDP/evaluation.csv")
+ad = paste0("path/CDP/evaluation.csv") # This summary is used to create figures
 write.csv(df,ad)
 
 ####################################################################
@@ -127,17 +127,11 @@ for(i in 1:nrow(paper_scenarios_0.3)){
   safety = results[5,1]#all the values are equal
   total_sample = results[6,1]
   df[,i] = c(pcs,overdose_patient,safety,total_sample)
-  add = paste0("C:/Users/shokouhinid/sstp_2023_Wages/Dr. wages_code/final_results_01232025/target_0.3/N30",i,".csv")
+  add = paste0("path/target_0.3/N30",i,".csv")
   write.csv(results,add)
 }
-ad = paste0("C:/Users/shokouhinid/sstp_2023_Wages/Dr. wages_code/final_results_01232025/target_0.3/N30_evaluation.csv")
+ad = paste0("path/target_0.3/N30_evaluation.csv")
 write.csv(df,ad)
-
-
-
-
-
-
 
 
 ####################################################################
@@ -175,9 +169,7 @@ f<-function(b){
 b0<-uniroot(f,c(0.0001,100))$root
 a0<-mu*b0/(1-mu)
 
-
 paper_scenarios_0.25 = rbind(s1,s2,s3,s4,s5,s6,s7,s8,s9,s10)
-
 
 ntrial <- 10000    #number of simulated trials
 target <- 0.25	#target DLT rate
@@ -199,11 +191,12 @@ for(i in 1:nrow(paper_scenarios_0.25)){
   safety = results[5,1]#all the values are equal
   total_sample = results[6,1]
   df[,i] = c(pcs,overdose_patient,safety,total_sample)
-  add = paste0("C:/Users/shokouhinid/sstp_2023_Wages/Dr. wages_code/final_results_01232025/target_0.25/CDP/",i,".csv")
+  add = paste0("path/target_0.25/CDP/",i,".csv")
   write.csv(results,add)
 }
-ad = paste0("C:/Users/shokouhinid/sstp_2023_Wages/Dr. wages_code/final_results_01232025/target_0.25/CDP/eval.csv")
+ad = paste0("path/target_0.25/CDP/eval.csv")
 write.csv(df,ad)
+
 
 
 
