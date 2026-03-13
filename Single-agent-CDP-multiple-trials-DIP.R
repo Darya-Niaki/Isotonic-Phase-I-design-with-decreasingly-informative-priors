@@ -1,6 +1,7 @@
-# This is for the original DIP method that hyper parameters are based on the p0.
+# This function generates a clean and visually organized summary of the results for DIP with a flat prior and DIP_mean with a non-flat prior.
+# simcdp_DIP and simcdp_DIP2 contain the results from multiple trials within a single simulation run.
 
-simcdp_DIP<-function(p0,target,ssize,n.stop,ntrial,cl){
+simcdp_DIP<-function(p0,target,ssize,n.stop,ntrial,cl,N,method){
   ndose=length(p0)
   
   a0<-b0<-d.select<-tox<-pts<-matrix(nrow=ntrial,ncol=ndose)
@@ -8,7 +9,7 @@ simcdp_DIP<-function(p0,target,ssize,n.stop,ntrial,cl){
   nstop=0
   
   for(i in 1:ntrial){
-    result<-cdp_DIP(p0,target,ssize,n.stop,cl)
+    result<-cdp_DIP(p0,target,ssize,n.stop,cl,N,method)
     d.select[i,]=result$dose.select
     tox[i,]=result$tox.data
     pts[i,]=result$pt.allocation
@@ -17,7 +18,7 @@ simcdp_DIP<-function(p0,target,ssize,n.stop,ntrial,cl){
     a0[i,] = result$a0
     b0[i,] = result$b0
   }
-  cat("Simulation results for Conaway, Dunbar, Peddada (2004)\n");
+  cat("Simulation results for DIP with flat prior\n");
   cat("method targeting a DLT rate of", target,"\n\n");
   cat("True DLT probability:\n")
   cat(round(p0,3),  sep="\t",  "\n")
@@ -34,17 +35,13 @@ simcdp_DIP<-function(p0,target,ssize,n.stop,ntrial,cl){
   cat ("Number of patients treated above the MTD:\n");
   cat(formatC(sum(colMeans(pts)[(which(p0==target,arr.ind = TRUE) + 1):length(p0)]), digits=1, format="f"), sep="\t",   "\n")
   cat("Design specifications: \n");
-  cat("Prior distribution on DLT rate at each dose level:\n");
-  cat("beta \n");
-  cat(colMeans(a0), colMeans(b0), "\n");
   cat("Safety stopping rule:\n");
   cat("Stop the trial if the Pr(DLT rate at the lowest study dose level > target | data) > ",cl,"\n");
-  
 } 
 
 #------------------------------------------------------------------------------
 
-# This is for the new DIP method, where p0 is equal to the scenarios.
+# 
 simcdp_DIP2<-function(p0,target,ssize,n.stop,ntrial,cl,N){
   ndose=length(p0)
   
@@ -62,7 +59,7 @@ simcdp_DIP2<-function(p0,target,ssize,n.stop,ntrial,cl,N){
     a0[i,] = result$a0
     b0[i,] = result$b0
   }
-  cat("Simulation results for Conaway, Dunbar, Peddada (2004)\n");
+  cat("Simulation results for DIP with non-flat prior\n");
   cat("method targeting a DLT rate of", target,"\n\n");
   cat("True DLT probability:\n")
   cat(round(p0,3),  sep="\t",  "\n")
@@ -86,13 +83,8 @@ simcdp_DIP2<-function(p0,target,ssize,n.stop,ntrial,cl,N){
   cat("Stop the trial if the Pr(DLT rate at the lowest study dose level > target | data) > ",cl,"\n");
   
 }
-# p0 = c(0.3,	0.36,	0.42,	0.45,	0.46)
-# target = 0.25
-# ssize = 30
-# n.stop = 31
-# cl = 0.95
-# N = 20
-# ntrial = 100
+# simcdp_DIP(p0,target,ssize,n.stop,ntrial,cl,N=30,method="mean")
 # simcdp_DIP2(p0,target,ssize,n.stop,ntrial,cl,N)
+
 
 
