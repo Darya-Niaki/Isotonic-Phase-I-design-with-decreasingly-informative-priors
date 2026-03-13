@@ -8,8 +8,6 @@ cdp<-function(p0,target,a0,b0,ssize,n.stop,cl){
       while(i <= ssize){
         y[curr] = y[curr] + rbinom(1,1,p0[curr]);
         
-        # is p0 a vector of probabilities? like the first scenario?
-        
         n[curr] = n[curr] + 1;
         tried=which(n>0)
              
@@ -60,3 +58,4 @@ cdp<-function(p0,target,a0,b0,ssize,n.stop,cl){
       }
       return(list(dose.select=dose.select,tox.data=y,pt.allocation=n,stop=stop))
    }
+
